@@ -2,14 +2,16 @@ package com.example.timeapp.Repository;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.timeapp.misc.Task;
+import com.example.timeapp.db.TaskEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface Repository {
-    MutableLiveData<List<Task>> getTasks();
-    MutableLiveData<Task> getTask(int id);
-    void addTask(Task task);
-    void deleteTask(Task task);
-    void updateTask(Task task);
+    MutableLiveData<List<TaskEntity>> getTasks();
+    MutableLiveData<TaskEntity> getTask(int id);
+    MutableLiveData<TaskEntity> getTasksByDate(LocalDate Date);
+    void addTask(TaskEntity task);
+    void deleteTask(TaskEntity task);
+    void updateTask(TaskEntity task);
 }
