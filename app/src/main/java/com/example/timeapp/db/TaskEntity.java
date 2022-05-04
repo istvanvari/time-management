@@ -36,6 +36,13 @@ public class TaskEntity {
     public TaskEntity() {
     }
 
+    public TaskEntity(String taskName, String taskDescription, LocalDate taskDate, OffsetTime taskTime) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskDate = taskDate;
+        this.taskTime = taskTime;
+    }
+
     public long getId() {
         return id;
     }
@@ -91,6 +98,4 @@ public class TaskEntity {
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
-
-
 }

@@ -1,5 +1,7 @@
 package com.example.timeapp.Repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.timeapp.MainActivity;
@@ -10,12 +12,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class RepositoryImpl implements Repository {
-
     private static RepositoryImpl instance;
-    private TaskDatabase taskDatabase;
+    String TAG = "RepositoryImpl";
+    private final TaskDatabase taskDatabase;
 
 
-    private MutableLiveData<List<TaskEntity>> tasks;
+    private final MutableLiveData<List<TaskEntity>> tasks;
 
     public RepositoryImpl() {
         this.taskDatabase = MainActivity.getTaskDatabase();
@@ -32,6 +34,7 @@ public class RepositoryImpl implements Repository {
     @Override
     public MutableLiveData<List<TaskEntity>> getTasks() {
         tasks.setValue(taskDatabase.taskDao().getAllTasks());
+        Log.d(TAG, "getTasks: " + tasks.getValue().size());
         return tasks;
     }
 
@@ -47,7 +50,8 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void addTask(TaskEntity task) {
-
+        taskDatabase.taskDao().insertTask(task);
+        Log.d(TAG, "addTask: ");
     }
 
     @Override
