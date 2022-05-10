@@ -10,7 +10,7 @@ import java.util.List;
 public interface Repository {
     MutableLiveData<List<TaskEntity>> getTasks();
     MutableLiveData<TaskEntity> getTask(int id);
-    MutableLiveData<TaskEntity> getTasksByDate(LocalDate Date);
+    MutableLiveData<List<TaskEntity>> getTasksByDate(LocalDate Date);
     void addTask(TaskEntity task);
     void deleteTask(TaskEntity task);
     void updateTask(TaskEntity task);

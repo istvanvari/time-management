@@ -1,7 +1,7 @@
-package com.example.timeapp.ui.home;
+package com.example.timeapp.ui.today;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +13,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.timeapp.Repository.RepositoryImpl;
 import com.example.timeapp.databinding.FragmentHomeBinding;
 import com.example.timeapp.db.TaskEntity;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.timeapp.ui.NewTaskActivity;
 
-import java.time.LocalDate;
-import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class TodayFragment extends Fragment {
     String TAG = "HomeFragment";
-    static RepositoryImpl repository;
     private RecyclerViewAdapter adapter;
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
-    private HomeViewModel homeViewModel;
+    private TodayViewModel todayViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        todayViewModel = new ViewModelProvider(this).get(TodayViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -41,9 +37,7 @@ public class HomeFragment extends Fragment {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                addNewTask();
+                startActivity(new Intent(getContext(), NewTaskActivity.class));
             }
         });
         recyclerView = binding.recyclerView;
@@ -51,13 +45,11 @@ public class HomeFragment extends Fragment {
         adapter = new RecyclerViewAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        repository = RepositoryImpl.getInstance();
-
 
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-        homeViewModel.getTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
+        todayViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        todayViewModel.getTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
+        //todayViewModel.getTodaysTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
 
         return root;
     }
@@ -67,15 +59,15 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void addNewTask() {
-        TaskEntity task = new TaskEntity();
-        task.setTaskName("Task 1");
-        task.setTaskDescription("Description 1");
-        task.setTaskDate(LocalDate.now());
-        task.setTaskTime(OffsetTime.now());
-        homeViewModel.addTask(task);
-        Log.d(TAG, "addNewTask: ");
-    }
+//    private void addNewTask() {
+//        TaskEntity task = new TaskEntity();
+//        task.setTaskName("Task 1");
+//        task.setTaskDescription("Description 1");
+//        task.setTaskDate(LocalDate.now());
+//        task.setTaskTime(OffsetTime.now());
+//        homeViewModel.addTask(task);
+//        Log.d(TAG, "addNewTask: ");
+//    }
 
 
     @Override

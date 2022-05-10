@@ -1,4 +1,4 @@
-package com.example.timeapp.ui.home;
+package com.example.timeapp.ui.today;
 
 import android.view.LayoutInflater;
 import android.view.View;

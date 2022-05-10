@@ -1,6 +1,7 @@
 package com.example.timeapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,36 +12,28 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.timeapp.databinding.ActivityMainBinding;
-import com.example.timeapp.db.TaskDatabase;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    static TaskDatabase taskDatabase;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-
-    public static TaskDatabase getTaskDatabase() {
-        return taskDatabase;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        taskDatabase = TaskDatabase.getInstance(getApplicationContext());
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+        Log.d("MainActivity", "onCreate: ");
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_today, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

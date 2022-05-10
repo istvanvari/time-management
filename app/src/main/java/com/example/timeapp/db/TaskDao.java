@@ -33,4 +33,6 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table WHERE task_date = :date")
     List<TaskEntity> getTasksByDate(String date);
 
+    @Query("SELECT COUNT(id) FROM task_table")
+    int getNumberOfRows();
 }

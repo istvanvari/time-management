@@ -3,13 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_today">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.timeapp.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_today"
+        android:name="com.example.timeapp.ui.today.TodayFragment"
+        android:label="@string/today"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_newTaskActivity"
+            app:destination="@id/newTaskActivity"
+            app:popUpTo="@id/nav_today" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +27,11 @@
         android:name="com.example.timeapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <activity
+        android:id="@+id/newTaskActivity"
+        android:name="com.example.timeapp.ui.NewTaskActivity"
+        android:label="activity_new_task"
+        tools:layout="@layout/activity_new_task" />
+
+
 </navigation>

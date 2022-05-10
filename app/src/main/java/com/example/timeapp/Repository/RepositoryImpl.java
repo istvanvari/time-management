@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.timeapp.MainActivity;
+import com.example.timeapp.App;
 import com.example.timeapp.db.TaskDatabase;
 import com.example.timeapp.db.TaskEntity;
 
@@ -13,20 +13,20 @@ import java.util.List;
 
 public class RepositoryImpl implements Repository {
     private static RepositoryImpl instance;
-    String TAG = "RepositoryImpl";
     private final TaskDatabase taskDatabase;
-
-
     private final MutableLiveData<List<TaskEntity>> tasks;
+    String TAG = "RepositoryImpl";
 
     public RepositoryImpl() {
-        this.taskDatabase = MainActivity.getTaskDatabase();
+        Log.d("repo", "RepositoryImpl: constructor");
+        this.taskDatabase = App.getDatabase();
         this.tasks = new MutableLiveData<>();
     }
 
     public static RepositoryImpl getInstance() {
         if (instance == null) {
             instance = new RepositoryImpl();
+            Log.d("repo", "getInstance: get instance");
         }
         return instance;
     }
@@ -43,9 +43,11 @@ public class RepositoryImpl implements Repository {
         return null;
     }
 
+
     @Override
-    public MutableLiveData<TaskEntity> getTasksByDate(LocalDate Date) {
-        return null;
+    public MutableLiveData<List<TaskEntity>> getTasksByDate(LocalDate Date) {
+        tasks.setValue(taskDatabase.taskDao().getTasksByDate(Date.toString()));
+        return tasks;
     }
 
     @Override
@@ -62,5 +64,9 @@ public class RepositoryImpl implements Repository {
     @Override
     public void updateTask(TaskEntity task) {
 
+    }
+
+    public int getNumberOfRows() {
+        return taskDatabase.taskDao().getNumberOfRows();
     }
 }
