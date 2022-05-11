@@ -34,12 +34,8 @@ public class TodayFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), NewTaskActivity.class));
-            }
-        });
+        binding.fab.setOnClickListener(view -> startActivity(new Intent(getContext(), NewTaskActivity.class)));
+
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecyclerViewAdapter(new ArrayList<>());

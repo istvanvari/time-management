@@ -37,6 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/task_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -52,6 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@id/task_name_layout">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/task_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -68,12 +70,17 @@
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/task_description_layout">
+                app:layout_constraintTop_toBottomOf="@+id/task_description_layout"
+                app:startIconDrawable="@drawable/ic_baseline_date_range_24">
 
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/task_date"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:nextFocusRight="@+id/task_time" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,11 +94,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@+id/task_date_layout"
-                app:layout_constraintTop_toBottomOf="@+id/task_description_layout">
+                app:layout_constraintTop_toBottomOf="@+id/task_description_layout"
+                app:startIconDrawable="@drawable/ic_time_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/task_time"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,9 +110,9 @@
                 android:id="@+id/add_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginStart="12dp"
                 android:layout_marginBottom="65dp"
                 android:text="@string/add_new_task"
                 android:textSize="16sp"

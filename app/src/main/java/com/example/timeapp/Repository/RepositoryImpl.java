@@ -15,10 +15,10 @@ public class RepositoryImpl implements Repository {
     private static RepositoryImpl instance;
     private final TaskDatabase taskDatabase;
     private final MutableLiveData<List<TaskEntity>> tasks;
-    String TAG = "RepositoryImpl";
+    static String TAG = "RepositoryImpl";
 
     public RepositoryImpl() {
-        Log.d("repo", "RepositoryImpl: constructor");
+        Log.d(TAG, "RepositoryImpl: constructor");
         this.taskDatabase = App.getDatabase();
         this.tasks = new MutableLiveData<>();
     }
@@ -26,7 +26,7 @@ public class RepositoryImpl implements Repository {
     public static RepositoryImpl getInstance() {
         if (instance == null) {
             instance = new RepositoryImpl();
-            Log.d("repo", "getInstance: get instance");
+            Log.d(TAG, "getInstance: get instance");
         }
         return instance;
     }

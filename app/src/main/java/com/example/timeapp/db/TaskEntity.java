@@ -2,6 +2,7 @@ package com.example.timeapp.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -33,6 +34,7 @@ public class TaskEntity {
     @ColumnInfo(name = "is_completed")
     private boolean isCompleted;
 
+    @Ignore
     public TaskEntity() {
     }
 
