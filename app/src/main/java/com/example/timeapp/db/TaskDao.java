@@ -1,6 +1,7 @@
 package com.example.timeapp.db;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -27,11 +28,11 @@ public interface TaskDao {
     TaskEntity getTaskById(int id);
 
     @Query("SELECT * FROM task_table")
-    List<TaskEntity> getAllTasks();
+    LiveData<List<TaskEntity>> getAllTasks();
 
     //query for tasks by date
     @Query("SELECT * FROM task_table WHERE task_date = :date")
-    List<TaskEntity> getTasksByDate(String date);
+    LiveData<List<TaskEntity>> getTasksByDate(String date);
 
     @Query("SELECT COUNT(id) FROM task_table")
     int getNumberOfRows();

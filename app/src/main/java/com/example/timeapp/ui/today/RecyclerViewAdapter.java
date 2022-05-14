@@ -1,24 +1,29 @@
 package com.example.timeapp.ui.today;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timeapp.R;
 import com.example.timeapp.db.TaskEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private final List<TaskEntity> tasks;
+    private static final String TAG = "RecyclerViewAdapter";
+    private final RecyclerViewAdapter.ClickListener listener;
+    private List<TaskEntity> tasks = new ArrayList<>();
 
-    public RecyclerViewAdapter(List<TaskEntity> taskEntities) {
-        this.tasks = taskEntities;
+    public RecyclerViewAdapter(RecyclerViewAdapter.ClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,18 +46,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return tasks.size();
     }
 
+    public void updateData(List<TaskEntity> taskEntities) {
+        tasks = taskEntities;
+        Log.d(TAG, "updateData: ");
+        notifyDataSetChanged();
+    }
+
+
+    public interface ClickListener {
+        void openEditTaskActivity(int id);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView taskName;
         public TextView taskDescription;
         public TextView taskDate;
+        public CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             taskName = itemView.findViewById(R.id.task_name);
             taskDescription = itemView.findViewById(R.id.task_desc);
             taskDate = itemView.findViewById(R.id.task_date);
+            cardView = itemView.findViewById(R.id.card_view);
+            cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
-
     }
 }

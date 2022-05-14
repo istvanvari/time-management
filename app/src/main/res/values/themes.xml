@@ -22,4 +22,11 @@
     <style name="Theme.TimeApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TimeApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Floating" parent="Theme.TimeApp.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

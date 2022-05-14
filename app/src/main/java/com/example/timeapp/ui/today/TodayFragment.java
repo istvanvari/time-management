@@ -2,6 +2,7 @@ package com.example.timeapp.ui.today;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +15,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timeapp.databinding.FragmentHomeBinding;
-import com.example.timeapp.db.TaskEntity;
+import com.example.timeapp.ui.EditTaskActivity;
 import com.example.timeapp.ui.NewTaskActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TodayFragment extends Fragment {
+public class TodayFragment extends Fragment implements RecyclerViewAdapter.ClickListener {
     String TAG = "HomeFragment";
     private RecyclerViewAdapter adapter;
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
-    private TodayViewModel todayViewModel;
+    private TaskViewModel taskViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        todayViewModel = new ViewModelProvider(this).get(TodayViewModel.class);
+        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -38,32 +36,31 @@ public class TodayFragment extends Fragment {
 
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecyclerViewAdapter(new ArrayList<>());
+        recyclerView.setHasFixedSize(true);
+        adapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
 
         final TextView textView = binding.textHome;
-        todayViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        todayViewModel.getTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
-        //todayViewModel.getTodaysTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
+        taskViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        taskViewModel.getTasks().observe(getViewLifecycleOwner(), list -> adapter.updateData(list));
+//        taskViewModel.getTodaysTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
 
         return root;
     }
 
-    private void setRecyclerView(List<TaskEntity> taskEntities) {
-        adapter = new RecyclerViewAdapter(taskEntities);
-        recyclerView.setAdapter(adapter);
+    public void openEditTaskActivity(int id) {
+        Intent intent = new Intent(getContext(), EditTaskActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 
-//    private void addNewTask() {
-//        TaskEntity task = new TaskEntity();
-//        task.setTaskName("Task 1");
-//        task.setTaskDescription("Description 1");
-//        task.setTaskDate(LocalDate.now());
-//        task.setTaskTime(OffsetTime.now());
-//        homeViewModel.addTask(task);
-//        Log.d(TAG, "addNewTask: ");
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+//        adapter.updateData(taskViewModel.getTasks().getValue());
+        Log.d(TAG, "onResume: ");
+    }
 
 
     @Override

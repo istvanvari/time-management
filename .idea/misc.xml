@@ -12,6 +12,7 @@
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.1535" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1565" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/side_nav_bar.xml" value="0.1535" />
+        <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/layout/activity_edit_task.xml" value="0.264" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/layout/activity_new_task.xml" value="0.264" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/layout/app_bar_main.xml" value="0.176" />
@@ -31,5 +32,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.176" />
+      </ProjectState>
+    </option>
   </component>
 </project>

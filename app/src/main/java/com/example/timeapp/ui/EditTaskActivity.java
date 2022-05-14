@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.timeapp.R;
@@ -15,7 +14,6 @@ import com.example.timeapp.ui.today.TaskViewModel;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -26,35 +24,45 @@ import java.time.LocalDate;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 
-public class NewTaskActivity extends AppCompatActivity {
-    private static final String TAG = "NewTaskActivity";
-    LocalDate date;
-    OffsetTime time;
-    Button addButton;
+public class EditTaskActivity extends AppCompatActivity {
+
+    private static final String TAG = "EditTaskActivity";
+    TaskViewModel taskViewModel;
     TextInputEditText taskName, taskDescription, taskDate, taskTime;
     TextInputLayout taskNameLayout, taskDescriptionLayout, taskDateLayout, taskTimeLayout;
-    private TaskViewModel taskViewModel;
+    Button saveButton, cancelButton;
+    LocalDate date;
+    OffsetTime time;
+    private TaskEntity task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_task);
+        setContentView(R.layout.activity_edit_task);
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        initViews();
 
         date = null;
         time = null;
 
-        addButton.setOnClickListener(v -> addTask());
+        int id = getIntent().getIntExtra("id", -1);
+        task = taskViewModel.getTask(id).getValue();
 
-        taskDate.setOnClickListener(v -> onInputDate());
+        initViews();
         taskTime.setOnClickListener(v -> onInputTime());
+        taskDate.setOnClickListener(v -> onInputDate());
+        saveButton.setOnClickListener(v -> saveTask());
+        cancelButton.setOnClickListener(v -> onBackPressed());
+    }
+
+    private void saveTask() {
+        task.setTaskName(taskName.getText().toString());
+        task.setTaskDescription(taskDescription.getText().toString());
+        task.setTaskDate(date != null ? date : task.getTaskDate());
+        task.setTaskTime(time != null ? time : task.getTaskTime());
+        taskViewModel.updateTask(task);
+
+        onBackPressed();
     }
 
     private void initViews() {
@@ -68,7 +76,13 @@ public class NewTaskActivity extends AppCompatActivity {
         taskDate = findViewById(R.id.task_date);
         taskTime = findViewById(R.id.task_time);
 
-        addButton = findViewById(R.id.add_button);
+        saveButton = findViewById(R.id.save_button);
+        cancelButton = findViewById(R.id.cancel_button);
+
+        taskName.setText(task.getTaskName());
+        taskDescription.setText(task.getTaskDescription());
+        taskDate.setText(task.getTaskDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        taskTime.setText(task.getTaskTime().format(DateTimeFormatter.ofPattern("HH:mm")));
     }
 
     private void onInputDate() {
@@ -86,7 +100,6 @@ public class NewTaskActivity extends AppCompatActivity {
         datePicker.addOnPositiveButtonClickListener(selection -> {
             this.date = Instant.ofEpochMilli(selection).atOffset(OffsetTime.now().getOffset()).toLocalDate();
             taskDate.setText(date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-            taskDateLayout.setError(null);
         });
     }
 
@@ -99,34 +112,6 @@ public class NewTaskActivity extends AppCompatActivity {
         timePicker.addOnPositiveButtonClickListener(selection -> {
             this.time = OffsetTime.of(timePicker.getHour(), timePicker.getMinute(), 0, 0, OffsetTime.now().getOffset());
             taskTime.setText(time.format(DateTimeFormatter.ofPattern("HH:mm")));
-            taskTimeLayout.setError(null);
         });
-    }
-
-    public void addTask() {
-        if (!validInput()) return;
-        try {
-            String name = taskName.getText().toString();
-            String description = taskDescription.getText().toString();
-
-            TaskEntity task = new TaskEntity(name, description, date, time);
-            taskViewModel.addTask(task);
-            Snackbar.make(addButton, "Task added", Snackbar.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Snackbar.make(addButton, "Error", Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    private boolean validInput() {
-        if (date == null) {
-            taskDateLayout.setError("Please select a date");
-            return false;
-
-        }
-        if (time == null) {
-            taskTimeLayout.setError("Please select a time");
-            return false;
-        }
-        return true;
     }
 }

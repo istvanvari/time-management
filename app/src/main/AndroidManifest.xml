@@ -3,14 +3,18 @@
     package="com.example.timeapp">
 
     <application
-        android:allowBackup="true"
         android:name=".App"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeApp">
-
+        <activity
+            android:name=".ui.EditTaskActivity"
+            android:theme="@style/Floating"
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -22,14 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.NewTaskActivity"
             android:exported="false"
             android:label="@string/new_task"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.TimeApp.NoActionBar" />
-
     </application>
 
 </manifest>

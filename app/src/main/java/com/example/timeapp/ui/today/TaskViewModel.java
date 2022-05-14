@@ -8,33 +8,25 @@ import androidx.lifecycle.ViewModel;
 import com.example.timeapp.Repository.RepositoryImpl;
 import com.example.timeapp.db.TaskEntity;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class TodayViewModel extends ViewModel {
+public class TaskViewModel extends ViewModel {
     private final RepositoryImpl repository;
     private final MutableLiveData<String> mText;
     String TAG = "HomeViewModel";
-    private MutableLiveData<List<TaskEntity>> tasks;
+    private LiveData<List<TaskEntity>> tasks;
     private MutableLiveData<TaskEntity> task;
 
-    public TodayViewModel() {
+    public TaskViewModel() {
         repository = RepositoryImpl.getInstance();
-        int rowCount = repository.getNumberOfRows();
 
-        tasks = new MutableLiveData<>();
         task = new MutableLiveData<>();
+        tasks = repository.getTasks();
 
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
 
-        try {
-            tasks.setValue(repository.getTasks().getValue());
-        } catch (Exception e) {
-            tasks.setValue(new ArrayList<>());
-        }
     }
 
     public LiveData<String> getText() {
@@ -45,14 +37,20 @@ public class TodayViewModel extends ViewModel {
         return tasks;
     }
 
+    public LiveData<TaskEntity> getTask(int id) {
+        return repository.getTask(id);
+    }
+
     public void addTask(TaskEntity task) {
         repository.addTask(task);
-        tasks.setValue(repository.getTasks().getValue());
     }
 
     public LiveData<List<TaskEntity>> getTodaysTasks() {
         mText.setValue("This is today fragment");
-        tasks.setValue(repository.getTasksByDate(LocalDate.now()).getValue());
         return tasks;
+    }
+
+    public void updateTask(TaskEntity task) {
+        repository.updateTask(task);
     }
 }

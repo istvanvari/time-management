@@ -12,7 +12,7 @@ import java.time.OffsetTime;
 @Entity(tableName = "task_table")
 public class TaskEntity {
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
 
     @ColumnInfo(name = "task_name")
     private String taskName;
@@ -45,11 +45,11 @@ public class TaskEntity {
         this.taskTime = taskTime;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
