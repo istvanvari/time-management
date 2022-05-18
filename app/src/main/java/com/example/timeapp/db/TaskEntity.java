@@ -6,11 +6,14 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.timeapp.db.Converters.DateConverter;
+import com.example.timeapp.db.Converters.TimeConverter;
+
 import java.time.LocalDate;
 import java.time.OffsetTime;
 
 @Entity(tableName = "task_table")
-public class TaskEntity {
+public class TaskEntity implements Comparable<TaskEntity> {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -99,5 +102,16 @@ public class TaskEntity {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    @Override
+    public int compareTo(TaskEntity o) {
+        TaskEntity task = (TaskEntity) o;
+        if (task.getTaskName().equals(this.taskName) &&
+                task.getTaskDescription().equals(this.taskDescription) &&
+                task.getTaskDate().equals(this.taskDate) &&
+                task.getTaskTime().equals(this.taskTime)) return 0;
+        return 1;
+
     }
 }

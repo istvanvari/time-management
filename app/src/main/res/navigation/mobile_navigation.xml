@@ -9,10 +9,14 @@
         android:id="@+id/nav_today"
         android:name="com.example.timeapp.ui.today.TodayFragment"
         android:label="@string/today"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_today">
         <action
             android:id="@+id/action_nav_home_to_newTaskActivity"
             app:destination="@id/newTaskActivity"
+            app:popUpTo="@id/nav_today" />
+        <action
+            android:id="@+id/action_nav_today_to_taskActivity"
+            app:destination="@id/edit_task_activity"
             app:popUpTo="@id/nav_today" />
     </fragment>
 
@@ -23,15 +27,30 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.timeapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_routines"
+        android:name="com.example.timeapp.ui.routines.RoutinesFragment"
+        android:label="@string/routines"
+        tools:layout="@layout/fragment_routines">
+        <action
+            android:id="@+id/action_nav_routines_to_new_edit_routine_activity"
+            app:popUpTo="@id/nav_routines"
+            app:destination="@id/new_edit_routine_activity" />
+    </fragment>
     <activity
         android:id="@+id/newTaskActivity"
-        android:name="com.example.timeapp.ui.NewTaskActivity"
+        android:name="com.example.timeapp.ui.today.NewTaskActivity"
         android:label="activity_new_task"
         tools:layout="@layout/activity_new_task" />
+    <activity
+        android:id="@+id/edit_task_activity"
+        android:name="com.example.timeapp.ui.today.EditTaskActivity"
+        android:label="edit_task_activity"
+        tools:layout="@layout/activity_edit_task" />
+    <activity
+        android:id="@+id/new_edit_routine_activity"
+        android:name="com.example.timeapp.ui.routines.NewEditRoutineActivity"
+        android:label="new_edit_routine_activity"
+        tools:layout="@layout/activity_new_edit_routine" />
 
 
 </navigation>

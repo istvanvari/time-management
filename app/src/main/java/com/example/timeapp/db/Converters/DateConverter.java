@@ -1,4 +1,4 @@
-package com.example.timeapp.db;
+package com.example.timeapp.db.Converters;
 
 import androidx.annotation.NonNull;
 import androidx.room.TypeConverter;

@@ -6,22 +6,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.timeapp.databinding.FragmentHomeBinding;
-import com.example.timeapp.ui.EditTaskActivity;
-import com.example.timeapp.ui.NewTaskActivity;
+import com.example.timeapp.databinding.FragmentTodayBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 public class TodayFragment extends Fragment implements RecyclerViewAdapter.ClickListener {
     String TAG = "HomeFragment";
     private RecyclerViewAdapter adapter;
-    private FragmentHomeBinding binding;
+    private FragmentTodayBinding binding;
     private RecyclerView recyclerView;
     private TaskViewModel taskViewModel;
 
@@ -29,22 +29,32 @@ public class TodayFragment extends Fragment implements RecyclerViewAdapter.Click
                              ViewGroup container, Bundle savedInstanceState) {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         binding.fab.setOnClickListener(view -> startActivity(new Intent(getContext(), NewTaskActivity.class)));
 
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         adapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
+        taskViewModel.getTodayTasks().observe(getViewLifecycleOwner(), list -> adapter.updateData(list));
 
-        final TextView textView = binding.textHome;
-        taskViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        taskViewModel.getTasks().observe(getViewLifecycleOwner(), list -> adapter.updateData(list));
-//        taskViewModel.getTodaysTasks().observe(getViewLifecycleOwner(), this::setRecyclerView);
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                taskViewModel.deleteTask(adapter.getTaskAt(viewHolder.getAdapterPosition()));
+                Snackbar.make(root, "Task deleted", Snackbar.LENGTH_LONG).show();
+            }
+        }).attachToRecyclerView(recyclerView);
 
         return root;
     }

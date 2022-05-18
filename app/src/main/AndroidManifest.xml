@@ -11,14 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeApp">
         <activity
-            android:name=".ui.EditTaskActivity"
-            android:theme="@style/Floating"
+            android:name=".ui.routines.NewEditRoutineActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TimeApp.NoActionBar"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ui.today.EditTaskActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity"
-            android:exported="false" />
+            android:theme="@style/Floating" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.TimeApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.NewTaskActivity"
+            android:name=".ui.today.NewTaskActivity"
             android:exported="false"
             android:label="@string/new_task"
             android:parentActivityName=".MainActivity"

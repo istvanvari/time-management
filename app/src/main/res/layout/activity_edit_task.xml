@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:theme="@style/Floating"
-    tools:context=".ui.EditTaskActivity">
+    tools:context=".ui.today.EditTaskActivity">
 
 
     <androidx.cardview.widget.CardView

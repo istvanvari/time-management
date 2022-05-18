@@ -8,32 +8,31 @@ import androidx.lifecycle.ViewModel;
 import com.example.timeapp.Repository.RepositoryImpl;
 import com.example.timeapp.db.TaskEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
 public class TaskViewModel extends ViewModel {
+
     private final RepositoryImpl repository;
-    private final MutableLiveData<String> mText;
     String TAG = "HomeViewModel";
     private LiveData<List<TaskEntity>> tasks;
     private MutableLiveData<TaskEntity> task;
 
     public TaskViewModel() {
         repository = RepositoryImpl.getInstance();
-
         task = new MutableLiveData<>();
-        tasks = repository.getTasks();
-
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+        tasks = repository.getTasksByDate(LocalDate.now());
+//        tasks = new MutableLiveData<>();
     }
 
     public LiveData<List<TaskEntity>> getTasks() {
+        tasks = repository.getTasks();
+        return tasks;
+    }
+
+    public LiveData<List<TaskEntity>> getTodayTasks() {
+
         return tasks;
     }
 
@@ -45,12 +44,11 @@ public class TaskViewModel extends ViewModel {
         repository.addTask(task);
     }
 
-    public LiveData<List<TaskEntity>> getTodaysTasks() {
-        mText.setValue("This is today fragment");
-        return tasks;
-    }
-
     public void updateTask(TaskEntity task) {
         repository.updateTask(task);
+    }
+
+    public void deleteTask(TaskEntity task) {
+        repository.deleteTask(task);
     }
 }

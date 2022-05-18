@@ -31,7 +31,7 @@ public interface TaskDao {
     LiveData<List<TaskEntity>> getAllTasks();
 
     //query for tasks by date
-    @Query("SELECT * FROM task_table WHERE task_date = :date")
+    @Query("SELECT * FROM task_table WHERE task_date = :date ORDER BY task_time ASC")
     LiveData<List<TaskEntity>> getTasksByDate(String date);
 
     @Query("SELECT COUNT(id) FROM task_table")

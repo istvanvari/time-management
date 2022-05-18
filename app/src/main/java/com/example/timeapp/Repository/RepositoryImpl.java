@@ -19,14 +19,14 @@ public class RepositoryImpl implements Repository {
     private static RepositoryImpl instance;
     private final TaskDatabase taskDatabase;
     private final ExecutorService executor;
-    private  LiveData<List<TaskEntity>> tasks;
     private final MutableLiveData<TaskEntity> task;
+    private LiveData<List<TaskEntity>> tasks;
 
     public RepositoryImpl() {
         executor = Executors.newSingleThreadExecutor();
         Log.d(TAG, "RepositoryImpl: constructor");
         this.taskDatabase = App.getDatabase();
-        this.tasks = taskDatabase.taskDao().getAllTasks();
+        this.tasks = new MutableLiveData<>();
         this.task = new MutableLiveData<>();
     }
 
@@ -40,12 +40,13 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public LiveData<List<TaskEntity>> getTasks() {
+        tasks = taskDatabase.taskDao().getAllTasks();
         Log.d(TAG, "getTasks: ");
         return tasks;
     }
 
     @Override
-    public MutableLiveData<TaskEntity> getTask(int id) {
+    public LiveData<TaskEntity> getTask(int id) {
         task.setValue(taskDatabase.taskDao().getTaskById(id));
         return task;
     }
@@ -59,7 +60,7 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public void addTask(TaskEntity task) {
-        taskDatabase.taskDao().insertTask(task);
+        executor.execute(() -> taskDatabase.taskDao().insertTask(task));
         Log.d(TAG, "addTask: ");
     }
 
