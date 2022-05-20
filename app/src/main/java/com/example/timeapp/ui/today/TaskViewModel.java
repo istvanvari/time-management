@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.timeapp.Repository.RepositoryImpl;
 import com.example.timeapp.db.TaskEntity;
 
 import java.time.LocalDate;
@@ -22,7 +21,7 @@ public class TaskViewModel extends ViewModel {
     public TaskViewModel() {
         repository = RepositoryImpl.getInstance();
         task = new MutableLiveData<>();
-        tasks = repository.getTasksByDate(LocalDate.now());
+        tasks = repository.getTasksByDate(LocalDate.now().toString());
 //        tasks = new MutableLiveData<>();
     }
 

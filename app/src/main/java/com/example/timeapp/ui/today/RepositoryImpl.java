@@ -1,4 +1,4 @@
-package com.example.timeapp.Repository;
+package com.example.timeapp.ui.today;
 
 import android.util.Log;
 
@@ -9,7 +9,6 @@ import com.example.timeapp.App;
 import com.example.timeapp.db.TaskDatabase;
 import com.example.timeapp.db.TaskEntity;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,8 +52,8 @@ public class RepositoryImpl implements Repository {
 
 
     @Override
-    public LiveData<List<TaskEntity>> getTasksByDate(LocalDate Date) {
-        tasks = taskDatabase.taskDao().getTasksByDate(Date.toString());
+    public LiveData<List<TaskEntity>> getTasksByDate(String date) {
+        tasks = taskDatabase.taskDao().getTasksByDate(date);
         return tasks;
     }
 

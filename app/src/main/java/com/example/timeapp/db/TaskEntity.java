@@ -6,10 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.timeapp.db.Converters.DateConverter;
 import com.example.timeapp.db.Converters.TimeConverter;
 
-import java.time.LocalDate;
 import java.time.OffsetTime;
 
 @Entity(tableName = "task_table")
@@ -18,34 +16,59 @@ public class TaskEntity implements Comparable<TaskEntity> {
     private int id;
 
     @ColumnInfo(name = "task_name")
-    private String taskName;
+    private String name;
 
     @ColumnInfo(name = "task_description")
-    private String taskDescription;
+    private String description;
 
-    @TypeConverters({DateConverter.class})
     @ColumnInfo(name = "task_date")
-    private LocalDate taskDate;
+    private String date;
 
     @TypeConverters({TimeConverter.class})
     @ColumnInfo(name = "task_time")
-    private OffsetTime taskTime;
-
-    @ColumnInfo(name = "task_priority")
-    private String taskPriority;
+    private OffsetTime time;
 
     @ColumnInfo(name = "is_completed")
     private boolean isCompleted;
+
+    @ColumnInfo(name = "period")
+    private int period;
+
+    @ColumnInfo(name = "day")
+    private int day;
+
+    @ColumnInfo(name = "is_repeated")
+    private boolean isRepeated;
 
     @Ignore
     public TaskEntity() {
     }
 
-    public TaskEntity(String taskName, String taskDescription, LocalDate taskDate, OffsetTime taskTime) {
-        this.taskName = taskName;
-        this.taskDescription = taskDescription;
-        this.taskDate = taskDate;
-        this.taskTime = taskTime;
+    public TaskEntity(String name, String description, String date, OffsetTime time, boolean isCompleted, int period, int day, boolean isRepeated) {
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.time = time;
+        this.isCompleted = isCompleted;
+        this.period = period;
+        this.day = day;
+        this.isRepeated = isRepeated;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 
     public int getId() {
@@ -56,44 +79,36 @@ public class TaskEntity implements Comparable<TaskEntity> {
         this.id = id;
     }
 
-    public String getTaskName() {
-        return taskName;
+    public String getName() {
+        return name;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTaskDescription() {
-        return taskDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTaskDescription(String taskDescription) {
-        this.taskDescription = taskDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDate getTaskDate() {
-        return taskDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setTaskDate(LocalDate taskDate) {
-        this.taskDate = taskDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public OffsetTime getTaskTime() {
-        return taskTime;
+    public OffsetTime getTime() {
+        return time;
     }
 
-    public void setTaskTime(OffsetTime taskTime) {
-        this.taskTime = taskTime;
-    }
-
-    public String getTaskPriority() {
-        return taskPriority;
-    }
-
-    public void setTaskPriority(String taskPriority) {
-        this.taskPriority = taskPriority;
+    public void setTime(OffsetTime time) {
+        this.time = time;
     }
 
     public boolean isCompleted() {
@@ -104,14 +119,24 @@ public class TaskEntity implements Comparable<TaskEntity> {
         isCompleted = completed;
     }
 
+    public boolean isRepeated() {
+        return isRepeated;
+    }
+
+    public void setRepeated(boolean repeated) {
+        isRepeated = repeated;
+    }
+
     @Override
     public int compareTo(TaskEntity o) {
         TaskEntity task = (TaskEntity) o;
-        if (task.getTaskName().equals(this.taskName) &&
-                task.getTaskDescription().equals(this.taskDescription) &&
-                task.getTaskDate().equals(this.taskDate) &&
-                task.getTaskTime().equals(this.taskTime)) return 0;
+        if (task.getName().equals(this.name) &&
+                task.getDescription().equals(this.description) &&
+                task.getDate().equals(this.date) &&
+                task.getTime().equals(this.time) &&
+                task.getPeriod() == this.period &&
+                task.getDay() == this.day)
+            return 0;
         return 1;
-
     }
 }

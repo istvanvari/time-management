@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.timeapp.R;
 import com.example.timeapp.db.TaskEntity;
 import com.example.timeapp.util.DiffUtilCallbacks;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +39,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaskEntity task = tasks.get(position);
-        holder.taskName.setText(task.getTaskName());
-        holder.taskDescription.setText(task.getTaskDescription());
-        holder.taskTime.setText(task.getTaskTime().toString());
+        holder.taskName.setText(task.getName());
+        holder.taskDescription.setText(task.getDescription());
+        holder.taskTime.setText(task.getTime().toString());
+        holder.repeated_chip.setVisibility(task.isRepeated() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -87,6 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView taskDescription;
         public TextView taskTime;
         public CardView cardView;
+        public Chip repeated_chip;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +97,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             taskDescription = itemView.findViewById(R.id.task_desc);
             taskTime = itemView.findViewById(R.id.task_time);
             cardView = itemView.findViewById(R.id.card_view);
+            repeated_chip = itemView.findViewById(R.id.repeated_tag);
             cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
     }

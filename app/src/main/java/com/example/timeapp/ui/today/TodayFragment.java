@@ -32,7 +32,7 @@ public class TodayFragment extends Fragment implements RecyclerViewAdapter.Click
         binding = FragmentTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.fab.setOnClickListener(view -> startActivity(new Intent(getContext(), NewTaskActivity.class)));
+        binding.fab.setOnClickListener(view -> openAddTaskActivity());
 
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -61,7 +61,13 @@ public class TodayFragment extends Fragment implements RecyclerViewAdapter.Click
 
     public void openEditTaskActivity(int id) {
         Intent intent = new Intent(getContext(), EditTaskActivity.class);
-        intent.putExtra("id", id);
+        intent.putExtra("id", id).putExtra("action", 1);
+        startActivity(intent);
+    }
+
+    public void openAddTaskActivity() {
+        Intent intent = new Intent(getContext(), EditTaskActivity.class);
+        intent.putExtra("action", 0);
         startActivity(intent);
     }
 

@@ -41,6 +41,7 @@ public class NewTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
+
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -131,7 +132,7 @@ public class NewTaskActivity extends AppCompatActivity {
             String name = taskName.getText().toString();
             String description = taskDescription.getText().toString();
 
-            TaskEntity task = new TaskEntity(name, description, date, time);
+            TaskEntity task = new TaskEntity(name, description, date.toString(), time, false,0, 0, false);
             taskViewModel.addTask(task);
             Snackbar.make(addButton, "Task added", Snackbar.LENGTH_LONG).show();
             finish();

@@ -47,16 +47,16 @@ public class DiffUtilCallbacks extends DiffUtil.Callback {
 
         Bundle diff = new Bundle();
 
-        if (!oldTask.getTaskName().equals(newTask.getTaskName())) {
-            diff.putString("taskName", newTask.getTaskName());
+        if (!oldTask.getName().equals(newTask.getName())) {
+            diff.putString("taskName", newTask.getName());
         }
 
-        if (!oldTask.getTaskDescription().equals(newTask.getTaskDescription())) {
-            diff.putString("taskDescription", newTask.getTaskDescription());
+        if (!oldTask.getDescription().equals(newTask.getDescription())) {
+            diff.putString("taskDescription", newTask.getDescription());
         }
 
-        if (!oldTask.getTaskTime().equals(newTask.getTaskTime())) {
-            diff.putString("taskTime", newTask.getTaskTime().toString());
+        if (!oldTask.getTime().equals(newTask.getTime())) {
+            diff.putString("taskTime", newTask.getTime().toString());
         }
 
         if (diff.size() == 0) {
