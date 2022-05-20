@@ -1,5 +1,5 @@
 package com.example.timeapp.ui.routines;
-
+/*
 import static android.text.format.DateFormat.is24HourFormat;
 
 import android.os.Bundle;
@@ -200,3 +200,4 @@ public class NewEditRoutineActivity extends AppCompatActivity {
         }
     }
 }
+ */

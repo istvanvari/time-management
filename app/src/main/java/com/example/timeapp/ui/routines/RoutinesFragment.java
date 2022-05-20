@@ -2,7 +2,6 @@ package com.example.timeapp.ui.routines;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +9,27 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timeapp.databinding.FragmentRoutinesBinding;
+import com.example.timeapp.db.TaskEntity;
+import com.example.timeapp.ui.today.EditTaskActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAdapter.RoutinesClickListener {
     private static final String TAG = "RoutinesFragment";
     int today = LocalDate.now().getDayOfWeek().getValue();
+    int day = today;
+    List<TaskEntity> tasks = new ArrayList<>();
     private RecyclerView recyclerView;
     private RoutinesRecyclerViewAdapter adapter;
     private FragmentRoutinesBinding binding;
@@ -40,16 +45,22 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
         View root = binding.getRoot();
 
         binding.fab.setOnClickListener(view ->
-                startActivity(new Intent(getContext(), NewEditRoutineActivity.class).putExtra("type", "new")));
+                startActivity(new Intent(getContext(), EditTaskActivity.class).putExtra("action", 0)));
         chipGroup = binding.chipGroup;
 
         recyclerView = binding.recyclerViewRoutines;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         adapter = new RoutinesRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        routinesViewModel.getRoutines().observe(getViewLifecycleOwner(), list -> adapter.updateData(list));
+        routinesViewModel.getRepeatedTasks().observe(getViewLifecycleOwner(), list -> {
+                    tasks = list;
+                    adapter.updateData(filter(list));
+                }
+        );
+        setListeners();
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
@@ -59,31 +70,40 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                routinesViewModel.deleteRoutine(adapter.getRoutineAt(viewHolder.getAdapterPosition()));
+                routinesViewModel.deleteTask(adapter.getRoutineAt(viewHolder.getAdapterPosition()));
                 Snackbar.make(root, "Routine deleted", Snackbar.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView);
 
-        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.d(TAG, "checkedId: " + checkedId);
-            if (checkedId == -1) {
-                return;
-            }
-            Chip chip = (Chip) chipGroup.findViewById(checkedId);
-            String chiptext = chip.getText().toString().toUpperCase();
-            int day;
-            if (chiptext.equals("DAILY")) {
-                day = 0;
-            } else {
-                day = DayOfWeek.valueOf(chiptext).getValue();
-            }
-            adapter.getFilter().filter(String.valueOf(day));
-        });
-
-        chipGroup.check(today + 1);
-        adapter.getFilter().filter(String.valueOf(today + 1));
+        chipGroup.check(chipGroup.getChildAt(today).getId());
+        adapter.updateData(filter(tasks));
 
         return root;
+    }
+
+    private List<TaskEntity> filter(List<TaskEntity> list) {
+        List<TaskEntity> filteredList = new ArrayList<>();
+        for (TaskEntity t : list) {
+            if (t.getDay() == day) {
+                filteredList.add(t);
+            }
+        }
+        return filteredList;
+    }
+
+    private void setListeners() {
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == -1)
+                return;
+            for (int i = 0; i < chipGroup.getChildCount(); i++) {
+                Chip chip = (Chip) chipGroup.getChildAt(i);
+                if (chip.isChecked()) {
+                    day = i;
+                    break;
+                }
+            }
+            adapter.updateData(filter(tasks));
+        });
     }
 
     @Override
@@ -99,6 +119,6 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
 
     @Override
     public void onRoutinesClick(int id) {
-        startActivity(new Intent(getContext(), NewEditRoutineActivity.class).putExtra("type", "edit").putExtra("id", id));
+        startActivity(new Intent(getContext(), EditTaskActivity.class).putExtra("action", 1).putExtra("id", id));
     }
 }

@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class RepositoryImpl implements Repository {
+public class TaskRepository {
     static String TAG = "RepositoryImpl";
-    private static RepositoryImpl instance;
+    private static TaskRepository instance;
     private final TaskDatabase taskDatabase;
     private final ExecutorService executor;
     private final MutableLiveData<TaskEntity> task;
     private LiveData<List<TaskEntity>> tasks;
 
-    public RepositoryImpl() {
+    public TaskRepository() {
         executor = Executors.newSingleThreadExecutor();
         Log.d(TAG, "RepositoryImpl: constructor");
         this.taskDatabase = App.getDatabase();
@@ -29,46 +29,49 @@ public class RepositoryImpl implements Repository {
         this.task = new MutableLiveData<>();
     }
 
-    public static RepositoryImpl getInstance() {
+    public static TaskRepository getInstance() {
         if (instance == null) {
-            instance = new RepositoryImpl();
+            instance = new TaskRepository();
             Log.d(TAG, "getInstance: get instance");
         }
         return instance;
     }
 
-    @Override
+
     public LiveData<List<TaskEntity>> getTasks() {
         tasks = taskDatabase.taskDao().getAllTasks();
         Log.d(TAG, "getTasks: ");
         return tasks;
     }
 
-    @Override
+    public LiveData<List<TaskEntity>> getRepeatedTasks() {
+        return taskDatabase.taskDao().getRepeatedTasks();
+    }
+
+
     public LiveData<TaskEntity> getTask(int id) {
         task.setValue(taskDatabase.taskDao().getTaskById(id));
         return task;
     }
 
 
-    @Override
     public LiveData<List<TaskEntity>> getTasksByDate(String date) {
         tasks = taskDatabase.taskDao().getTasksByDate(date);
         return tasks;
     }
 
-    @Override
+
     public void addTask(TaskEntity task) {
         executor.execute(() -> taskDatabase.taskDao().insertTask(task));
         Log.d(TAG, "addTask: ");
     }
 
-    @Override
+
     public void deleteTask(TaskEntity task) {
         executor.execute(() -> taskDatabase.taskDao().deleteTask(task));
     }
 
-    @Override
+
     public void updateTask(TaskEntity task) {
         executor.execute(() -> taskDatabase.taskDao().updateTask(task));
     }

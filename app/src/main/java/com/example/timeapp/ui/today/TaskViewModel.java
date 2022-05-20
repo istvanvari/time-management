@@ -13,16 +13,15 @@ import java.util.List;
 
 public class TaskViewModel extends ViewModel {
 
-    private final RepositoryImpl repository;
+    private final TaskRepository repository;
     String TAG = "HomeViewModel";
     private LiveData<List<TaskEntity>> tasks;
     private MutableLiveData<TaskEntity> task;
 
     public TaskViewModel() {
-        repository = RepositoryImpl.getInstance();
+        repository = TaskRepository.getInstance();
         task = new MutableLiveData<>();
         tasks = repository.getTasksByDate(LocalDate.now().toString());
-//        tasks = new MutableLiveData<>();
     }
 
     public LiveData<List<TaskEntity>> getTasks() {
@@ -31,7 +30,6 @@ public class TaskViewModel extends ViewModel {
     }
 
     public LiveData<List<TaskEntity>> getTodayTasks() {
-
         return tasks;
     }
 

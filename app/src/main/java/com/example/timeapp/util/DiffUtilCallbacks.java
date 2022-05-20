@@ -59,6 +59,10 @@ public class DiffUtilCallbacks extends DiffUtil.Callback {
             diff.putString("taskTime", newTask.getTime().toString());
         }
 
+        if (oldTask.isRepeated() != newTask.isRepeated()) {
+            diff.putBoolean("repeated", newTask.isRepeated());
+        }
+
         if (diff.size() == 0) {
             return null;
         }

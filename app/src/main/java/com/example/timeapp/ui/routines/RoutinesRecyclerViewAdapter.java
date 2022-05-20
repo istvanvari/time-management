@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,17 +11,17 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.timeapp.R;
-import com.example.timeapp.db.RoutineEntity;
-import com.example.timeapp.util.RoutineDiffUtilCallbacks;
+import com.example.timeapp.db.TaskEntity;
+import com.example.timeapp.util.DiffUtilCallbacks;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRecyclerViewAdapter.RoutinesViewHolder> implements Filterable {
+public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRecyclerViewAdapter.RoutinesViewHolder> {
 
     private final RoutinesRecyclerViewAdapter.RoutinesClickListener listener;
-    private List<RoutineEntity> routines = new ArrayList<>();
-    private List<RoutineEntity> filteredRoutines = new ArrayList<>();
+    private List<TaskEntity> routines = new ArrayList<>();
 
     public RoutinesRecyclerViewAdapter(RoutinesRecyclerViewAdapter.RoutinesClickListener listener) {
         this.listener = listener;
@@ -32,16 +30,16 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
     @NonNull
     @Override
     public RoutinesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_routine, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item, parent, false);
         return new RoutinesViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RoutinesViewHolder holder, int position) {
-        RoutineEntity routine = filteredRoutines.get(position);
+        TaskEntity routine = routines.get(position);
         holder.routineName.setText(routine.getName());
         holder.routineDescription.setText(routine.getDescription());
-        holder.routineTime.setText(routine.getTime());
+        holder.routineTime.setText(routine.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
     }
 
     @Override
@@ -64,51 +62,55 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
 
     @Override
     public int getItemCount() {
-        return filteredRoutines.size();
+        return routines.size();
     }
 
-    public void updateData(List<RoutineEntity> newRoutines) {
-        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new RoutineDiffUtilCallbacks(this.routines, newRoutines));
-        result.dispatchUpdatesTo(this);
+    public void updateData(List<TaskEntity> newRoutines) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallbacks(this.routines, newRoutines));
         this.routines.clear();
         this.routines.addAll(newRoutines);
+        result.dispatchUpdatesTo(this);
     }
 
-    public RoutineEntity getRoutineAt(int position) {
-        return filteredRoutines.get(position);
+    public TaskEntity getRoutineAt(int position) {
+        return routines.get(position);
     }
 
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-
-                String charString = constraint.toString();
-                if (charString.isEmpty()) {
-                    filteredRoutines = routines;
-                } else {
-                    List<RoutineEntity> filteredList = new ArrayList<>();
-                    for (RoutineEntity routine : routines) {
-                        if (routine.getDay() == Integer.parseInt(charString)) {
-                            filteredList.add(routine);
+    /*
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    filterConstraint = constraint.toString();
+                    String charString = constraint.toString();
+                    if (charString.isEmpty()) {
+                        filteredRoutines = routines;
+                    } else {
+                        int constraintDay = Integer.parseInt(charString);
+                        List<TaskEntity> filteredList = new ArrayList<>();
+                        for (TaskEntity routine : routines) {
+                            if (routine.getDay() == constraintDay) {
+                                filteredList.add(routine);
+                            }
                         }
+                        filteredRoutines = filteredList;
                     }
-                    filteredRoutines = filteredList;
+                    FilterResults filterResults = new FilterResults();
+                    filterResults.values = filteredRoutines;
+                    return filterResults;
                 }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredRoutines;
-                return filterResults;
-            }
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredRoutines = (List<RoutineEntity>) results.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
-
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallbacks(filteredRoutines, (List<TaskEntity>) results.values));
+                    filteredRoutines.clear();
+                    filteredRoutines.addAll((List<TaskEntity>) results.values);
+                    result.dispatchUpdatesTo(RoutinesRecyclerViewAdapter.this);
+                }
+            };
+        }
+        */
     public interface RoutinesClickListener {
         void onRoutinesClick(int id);
     }
@@ -119,10 +121,10 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
 
         public RoutinesViewHolder(@NonNull View itemView) {
             super(itemView);
-            routineName = itemView.findViewById(R.id.routine_name);
-            routineDescription = itemView.findViewById(R.id.routine_desc);
-            routineTime = itemView.findViewById(R.id.routine_time);
-            itemView.setOnClickListener(v -> listener.onRoutinesClick(filteredRoutines.get(getAdapterPosition()).getId()));
+            routineName = itemView.findViewById(R.id.task_name);
+            routineDescription = itemView.findViewById(R.id.task_desc);
+            routineTime = itemView.findViewById(R.id.task_time);
+            itemView.setOnClickListener(v -> listener.onRoutinesClick(routines.get(getAdapterPosition()).getId()));
         }
     }
 }

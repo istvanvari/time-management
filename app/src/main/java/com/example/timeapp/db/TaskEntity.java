@@ -135,7 +135,8 @@ public class TaskEntity implements Comparable<TaskEntity> {
                 task.getDate().equals(this.date) &&
                 task.getTime().equals(this.time) &&
                 task.getPeriod() == this.period &&
-                task.getDay() == this.day)
+                task.getDay() == this.day &&
+                task.isRepeated() == this.isRepeated)
             return 0;
         return 1;
     }

@@ -60,6 +60,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (bundle.containsKey("taskTime")) {
                 holder.taskTime.setText(bundle.getString("taskTime"));
             }
+            if (bundle.containsKey("repeated")) {
+                holder.repeated_chip.setVisibility(bundle.getBoolean("repeated") ? View.VISIBLE : View.GONE);
+            }
         }
     }
 
