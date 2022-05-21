@@ -32,6 +32,7 @@
     <string name="save">Save</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="repeat_period">Repeat period</string>
+    <string name="calendar">Calendar</string>
 
     <string-array name="periods">
         <item>Daily</item>

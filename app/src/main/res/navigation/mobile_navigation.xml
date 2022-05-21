@@ -11,20 +11,24 @@
         android:label="@string/today"
         tools:layout="@layout/fragment_today">
         <action
-            android:id="@+id/action_nav_home_to_newTaskActivity"
-            app:destination="@id/newTaskActivity"
-            app:popUpTo="@id/nav_today" />
-        <action
             android:id="@+id/action_nav_today_to_taskActivity"
             app:destination="@id/edit_task_activity"
             app:popUpTo="@id/nav_today" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.timeapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_calendar"
+        android:name="com.example.timeapp.ui.calendar.CalendarFragment"
+        android:label="@string/calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_nav_calendar_to_edit_task_activity"
+            app:destination="@id/edit_task_activity" />
+        <action
+            android:id="@+id/action_nav_calendar_to_nav_today"
+            app:destination="@id/nav_today"
+            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_routines"
@@ -32,25 +36,14 @@
         android:label="@string/routines"
         tools:layout="@layout/fragment_routines">
         <action
-            android:id="@+id/action_nav_routines_to_new_edit_routine_activity"
-            app:popUpTo="@id/nav_routines"
-            app:destination="@id/new_edit_routine_activity" />
+            android:id="@+id/action_nav_routines_to_edit_task_activity"
+            app:destination="@id/edit_task_activity" />
     </fragment>
-    <activity
-        android:id="@+id/newTaskActivity"
-        android:name="com.example.timeapp.ui.today.NewTaskActivity"
-        android:label="activity_new_task"
-        tools:layout="@layout/activity_new_task" />
     <activity
         android:id="@+id/edit_task_activity"
         android:name="com.example.timeapp.ui.today.EditTaskActivity"
         android:label="edit_task_activity"
         tools:layout="@layout/activity_edit_task" />
-    <activity
-        android:id="@+id/new_edit_routine_activity"
-        android:name="com.example.timeapp.ui.routines.NewEditRoutineActivity"
-        android:label="new_edit_routine_activity"
-        tools:layout="@layout/activity_new_edit_routine" />
 
 
 </navigation>

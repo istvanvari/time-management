@@ -1,7 +1,6 @@
-package com.example.timeapp.ui.today;
+package com.example.timeapp.ui.calendar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,24 +17,18 @@ import com.example.timeapp.util.ClickListener;
 import com.example.timeapp.util.DiffUtilCallbacks;
 import com.google.android.material.chip.Chip;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
     private final ClickListener listener;
-    private final LocalDate today;
     private List<TaskEntity> tasks = new ArrayList<>();
 
-    public RecyclerViewAdapter(ClickListener listener, LocalDate today) {
+    public CalendarAdapter(ClickListener listener) {
         this.listener = listener;
-        this.today = today == null ? LocalDate.now() : today;
     }
 
     @NonNull
@@ -50,8 +43,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TaskEntity task = tasks.get(position);
         holder.taskName.setText(task.getName());
         holder.taskDescription.setText(task.getDescription());
+        holder.chip.setVisibility(View.GONE);
         holder.taskTime.setText(task.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-        holder.repeated_chip.setVisibility(task.isRepeated() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -69,9 +62,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (bundle.containsKey("taskTime")) {
                 holder.taskTime.setText(bundle.getString("taskTime"));
             }
-            if (bundle.containsKey("repeated")) {
-                holder.repeated_chip.setVisibility(bundle.getBoolean("repeated") ? View.VISIBLE : View.GONE);
-            }
         }
     }
 
@@ -80,46 +70,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return tasks.size();
     }
 
-    public void updateData(List<TaskEntity> tasks) {
-        tasks = filter(tasks);
+    public void updateData(List<TaskEntity> tasks, String date) {
+        tasks = filter(tasks, date);
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallbacks(this.tasks, tasks));
         result.dispatchUpdatesTo(this);
         this.tasks.clear();
         this.tasks.addAll(tasks);
     }
 
-    private List<TaskEntity> filter(List<TaskEntity> tasks) {
-        String todayString = today.toString();
-        int todayWeekDay = today.getDayOfWeek().getValue();
-        TemporalField tf = WeekFields.ISO.weekOfWeekBasedYear();
-        int todayWeekNumber = today.get(tf);
-
-        Log.d(TAG, "filter: " + todayString + " " + todayWeekDay + " " + todayWeekNumber);
-
-        List<TaskEntity> filteredTasks = new ArrayList<>();
+    private List<TaskEntity> filter(List<TaskEntity> tasks, String date) {
+        List<TaskEntity> filtered = new ArrayList<>();
         for (TaskEntity task : tasks) {
-            if (task.getDate().equals(todayString)) {
-                filteredTasks.add(task);
-                continue;
-            }
-            if (task.isRepeated()) {
-                int taskPeriod = task.getPeriod();
-                if (taskPeriod == 0) {
-                    filteredTasks.add(task);
-                } else if (task.getDay() == todayWeekDay) {
-                    if (taskPeriod == 1) {
-                        filteredTasks.add(task);
-                    } else {
-                        int taskWeekNumber = LocalDate.parse(task.getDate()).get(tf);
-                        if (taskWeekNumber % taskPeriod == todayWeekNumber % taskPeriod) {
-                            filteredTasks.add(task);
-                        }
-                    }
-                }
+            if (task.getDate().equals(date) && !task.isRepeated()) {
+                filtered.add(task);
             }
         }
-        return filteredTasks;
+        return filtered;
     }
+
 
     public TaskEntity getTaskAt(int position) {
         return tasks.get(position);
@@ -130,16 +98,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView taskName;
         public TextView taskDescription;
         public TextView taskTime;
+        public Chip chip;
         public CardView cardView;
-        public Chip repeated_chip;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             taskName = itemView.findViewById(R.id.task_name);
             taskDescription = itemView.findViewById(R.id.task_desc);
             taskTime = itemView.findViewById(R.id.task_time);
+            chip = itemView.findViewById(R.id.repeated_tag);
             cardView = itemView.findViewById(R.id.card_view);
-            repeated_chip = itemView.findViewById(R.id.repeated_tag);
             cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
     }

@@ -76,4 +76,7 @@ public class TaskRepository {
         executor.execute(() -> taskDatabase.taskDao().updateTask(task));
     }
 
+    public LiveData<List<TaskEntity>> getTasksSorted() {
+        return taskDatabase.taskDao().getTasksSorted();
+    }
 }

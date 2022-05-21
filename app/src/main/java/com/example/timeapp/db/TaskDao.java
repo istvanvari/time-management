@@ -33,10 +33,12 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table WHERE is_repeated = 1 ORDER BY task_time ASC")
     LiveData<List<TaskEntity>> getRepeatedTasks();
 
-    @Query("SELECT * FROM task_table WHERE task_date = :date ORDER BY task_time ASC")
+    @Query("SELECT * FROM task_table WHERE task_date = :date AND is_repeated = 0 ORDER BY task_time ASC")
     LiveData<List<TaskEntity>> getTasksByDate(String date);
 
     @Query("SELECT COUNT(id) FROM task_table")
     int getNumberOfRows();
 
+    @Query("SELECT * FROM task_table ORDER BY task_time ASC")
+    LiveData<List<TaskEntity>> getTasksSorted();
 }

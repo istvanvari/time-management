@@ -19,19 +19,16 @@ import com.example.timeapp.databinding.FragmentTodayBinding;
 import com.example.timeapp.util.ClickListener;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.time.LocalDate;
-
 public class TodayFragment extends Fragment implements ClickListener {
     String TAG = "HomeFragment";
     private RecyclerViewAdapter adapter;
     private FragmentTodayBinding binding;
     private RecyclerView recyclerView;
-    private LocalDate today = LocalDate.now();
     private TaskViewModel taskViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
 
         binding = FragmentTodayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -42,7 +39,7 @@ public class TodayFragment extends Fragment implements ClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerViewAdapter(this, today);
+        adapter = new RecyclerViewAdapter(this, taskViewModel.getDay().getValue());
         recyclerView.setAdapter(adapter);
 
         taskViewModel.getTasks().observe(getViewLifecycleOwner(), list -> adapter.updateData(list));

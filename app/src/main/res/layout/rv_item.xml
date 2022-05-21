@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
+    style="@style/Theme.TimeApp.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -32,9 +33,10 @@
         <View
             android:id="@+id/divider3"
             android:layout_width="1dp"
-            android:layout_height="126dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:background="?android:attr/listDivider"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/task_time"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,25 +46,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:maxLines="1"
-            android:textColor="@android:color/black"
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/task_desc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/divider3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/task_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:maxLines="2"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/repeated_tag"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/divider3"
-            app:layout_constraintTop_toBottomOf="@id/task_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/divider3" />
 
 
         <com.google.android.material.chip.Chip
@@ -74,9 +80,12 @@
             android:checked="true"
             android:clickable="false"
             android:text="Routine"
+            android:visibility="visible"
+            app:checkedIconTint="?attr/colorOnSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/divider3"
-            app:layout_constraintTop_toBottomOf="@id/task_desc" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/divider3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

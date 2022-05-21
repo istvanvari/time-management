@@ -2,17 +2,21 @@
     <!-- Base application theme. -->
     <style name="Theme.TimeApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/lightCyan</item>
+        <item name="colorPrimary">@color/darkCyan</item>
         <item name="colorPrimaryVariant">@color/lightCyan</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/lightCyan</item>
         <item name="colorSecondaryVariant">@color/lightCyan</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/white</item>
 
-<!--        <item name="android:background">@color/white</item>-->
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="Theme.TimeApp.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:backgroundTint">@color/grayNew</item>
+    </style>
+
 </resources>

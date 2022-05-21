@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/nav_today"
             android:icon="@drawable/ic_playlist_add_check_24"
             android:title="@string/today" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
-        <item
             android:id="@+id/nav_routines"
-            android:icon="@drawable/ic_edit_calendar_24"
+            android:icon="@drawable/ic_repeat"
             android:title="@string/routines" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/calendar" />
     </group>
+
+    <item android:title="Dand and Light modes">
+        <menu>
+            <item
+                android:id="@+id/nav_light_switch"
+                app:actionLayout="@layout/menu_switch"
+                android:icon="@drawable/ic_light_mode"
+                android:title="Dark mode" />
+        </menu>
+    </item>
+
+
 </menu>

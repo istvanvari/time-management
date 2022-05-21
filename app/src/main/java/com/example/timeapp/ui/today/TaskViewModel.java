@@ -15,6 +15,7 @@ public class TaskViewModel extends ViewModel {
 
     private final TaskRepository repository;
     String TAG = "HomeViewModel";
+    private MutableLiveData<LocalDate> day = new MutableLiveData<>();
     private LiveData<List<TaskEntity>> tasks;
     private MutableLiveData<TaskEntity> task;
 
@@ -29,8 +30,8 @@ public class TaskViewModel extends ViewModel {
         return tasks;
     }
 
-    public LiveData<List<TaskEntity>> getTodayTasks() {
-        return tasks;
+    public LiveData<List<TaskEntity>> getTasksByDate(String date) {
+        return repository.getTasksByDate(date);
     }
 
     public LiveData<TaskEntity> getTask(int id) {
@@ -48,4 +49,17 @@ public class TaskViewModel extends ViewModel {
     public void deleteTask(TaskEntity task) {
         repository.deleteTask(task);
     }
+
+    public LiveData<List<TaskEntity>> getTasksSorted() {
+        return repository.getTasksSorted();
+    }
+
+    public LiveData<LocalDate> getDay() {
+        return day;
+    }
+
+    public void setDay(LocalDate now) {
+        this.day.setValue(now);
+    }
+
 }
