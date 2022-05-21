@@ -46,7 +46,7 @@ public class EditTaskActivity extends AppCompatActivity {
     SwitchMaterial taskRepeatSwitch;
     Group taskRepeatGroup, selectDayGroup;
     boolean isRepeated = false;
-    int ACTION_TYPE, day = -1, period = -1;
+    int ACTION_TYPE, TASK_TYPE, day = -1, period = -1;
     LocalDate date = null;
     OffsetTime time = null;
     private String[] PERIODS;
@@ -60,6 +60,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         int id = getIntent().getIntExtra("id", -1);
         ACTION_TYPE = getIntent().getIntExtra("action", -1);
+        TASK_TYPE = getIntent().getIntExtra("task_type", -1);
         PERIODS = getResources().getStringArray(R.array.periods);
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
@@ -92,6 +93,9 @@ public class EditTaskActivity extends AppCompatActivity {
             saveButton.setText(R.string.save);
         } else { // new
             task = new TaskEntity();
+            if (TASK_TYPE == 1) {
+                taskRepeatSwitch.setChecked(true);
+            }
         }
     }
 

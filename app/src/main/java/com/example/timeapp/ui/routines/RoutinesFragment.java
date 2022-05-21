@@ -29,8 +29,8 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
     private static final String TAG = "RoutinesFragment";
     int today = LocalDate.now().getDayOfWeek().getValue();
     int day = today;
-    List<TaskEntity> tasks = new ArrayList<>();
     private RecyclerView recyclerView;
+    private List<TaskEntity> tasks = new ArrayList<>();
     private RoutinesRecyclerViewAdapter adapter;
     private FragmentRoutinesBinding binding;
     private RoutinesViewModel routinesViewModel;
@@ -45,7 +45,7 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
         View root = binding.getRoot();
 
         binding.fab.setOnClickListener(view ->
-                startActivity(new Intent(getContext(), EditTaskActivity.class).putExtra("action", 0)));
+                startActivity(new Intent(getContext(), EditTaskActivity.class).putExtra("action", 0).putExtra("task_type", 1)));
         chipGroup = binding.chipGroup;
 
         recyclerView = binding.recyclerViewRoutines;
@@ -57,7 +57,7 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
 
         routinesViewModel.getRepeatedTasks().observe(getViewLifecycleOwner(), list -> {
                     tasks = list;
-                    adapter.updateData(filter(list));
+                    adapter.updateData(list, day);
                 }
         );
         setListeners();
@@ -76,20 +76,11 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
         }).attachToRecyclerView(recyclerView);
 
         chipGroup.check(chipGroup.getChildAt(today).getId());
-        adapter.updateData(filter(tasks));
+        adapter.updateData(tasks, today);
 
         return root;
     }
 
-    private List<TaskEntity> filter(List<TaskEntity> list) {
-        List<TaskEntity> filteredList = new ArrayList<>();
-        for (TaskEntity t : list) {
-            if (t.getDay() == day) {
-                filteredList.add(t);
-            }
-        }
-        return filteredList;
-    }
 
     private void setListeners() {
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -102,7 +93,7 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
                     break;
                 }
             }
-            adapter.updateData(filter(tasks));
+            adapter.updateData(tasks, day);
         });
     }
 

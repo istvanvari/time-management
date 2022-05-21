@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import com.example.timeapp.db.TaskEntity;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class DiffUtilCallbacks extends DiffUtil.Callback {
@@ -56,7 +57,7 @@ public class DiffUtilCallbacks extends DiffUtil.Callback {
         }
 
         if (!oldTask.getTime().equals(newTask.getTime())) {
-            diff.putString("taskTime", newTask.getTime().toString());
+            diff.putString("taskTime", newTask.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         }
 
         if (oldTask.isRepeated() != newTask.isRepeated()) {

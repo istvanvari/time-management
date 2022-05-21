@@ -65,52 +65,28 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
         return routines.size();
     }
 
-    public void updateData(List<TaskEntity> newRoutines) {
+    public void updateData(List<TaskEntity> newRoutines, int day) {
+        newRoutines = filter(newRoutines, day);
         DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallbacks(this.routines, newRoutines));
         this.routines.clear();
         this.routines.addAll(newRoutines);
         result.dispatchUpdatesTo(this);
     }
 
+    private List<TaskEntity> filter(List<TaskEntity> list, int day) {
+        List<TaskEntity> filteredList = new ArrayList<>();
+        for (TaskEntity t : list) {
+            if (t.getDay() == day) {
+                filteredList.add(t);
+            }
+        }
+        return filteredList;
+    }
+
     public TaskEntity getRoutineAt(int position) {
         return routines.get(position);
     }
 
-    /*
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    filterConstraint = constraint.toString();
-                    String charString = constraint.toString();
-                    if (charString.isEmpty()) {
-                        filteredRoutines = routines;
-                    } else {
-                        int constraintDay = Integer.parseInt(charString);
-                        List<TaskEntity> filteredList = new ArrayList<>();
-                        for (TaskEntity routine : routines) {
-                            if (routine.getDay() == constraintDay) {
-                                filteredList.add(routine);
-                            }
-                        }
-                        filteredRoutines = filteredList;
-                    }
-                    FilterResults filterResults = new FilterResults();
-                    filterResults.values = filteredRoutines;
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtilCallbacks(filteredRoutines, (List<TaskEntity>) results.values));
-                    filteredRoutines.clear();
-                    filteredRoutines.addAll((List<TaskEntity>) results.values);
-                    result.dispatchUpdatesTo(RoutinesRecyclerViewAdapter.this);
-                }
-            };
-        }
-        */
     public interface RoutinesClickListener {
         void onRoutinesClick(int id);
     }
