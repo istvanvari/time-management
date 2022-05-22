@@ -66,26 +66,50 @@
             android:layout_marginBottom="8dp"
             android:maxLines="2"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/repeated_tag"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/divider3" />
+            app:layout_constraintStart_toEndOf="@+id/divider3"
+            tools:layout_editor_absoluteY="48dp" />
 
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/repeated_tag"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
+            style="@style/Widget.MaterialComponents.Chip.Action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:checked="true"
             android:clickable="false"
+            android:elevation="9dp"
             android:text="Routine"
-            android:visibility="visible"
-            app:checkedIconTint="?attr/colorOnSecondary"
+            app:chipIcon="@drawable/ic_repeat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/divider3" />
+            app:layout_constraintStart_toEndOf="@+id/divider3"
+            app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/reminder_tag"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:clickable="false"
+            android:elevation="9dp"
+            android:text="Reminder"
+            app:chipIcon="@drawable/ic_baseline_notifications_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/repeated_tag"
+            app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -52,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.taskDescription.setText(task.getDescription());
         holder.taskTime.setText(task.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         holder.repeated_chip.setVisibility(task.isRepeated() ? View.VISIBLE : View.GONE);
+        holder.reminder_chip.setVisibility(task.getReminderType() != 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -71,6 +72,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
             if (bundle.containsKey("repeated")) {
                 holder.repeated_chip.setVisibility(bundle.getBoolean("repeated") ? View.VISIBLE : View.GONE);
+            }
+            if (bundle.containsKey("reminderType")) {
+                holder.reminder_chip.setVisibility(bundle.getBoolean("reminderType") ? View.VISIBLE : View.GONE);
             }
         }
     }
@@ -131,7 +135,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView taskDescription;
         public TextView taskTime;
         public CardView cardView;
-        public Chip repeated_chip;
+        public Chip repeated_chip, reminder_chip;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,6 +144,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             taskTime = itemView.findViewById(R.id.task_time);
             cardView = itemView.findViewById(R.id.card_view);
             repeated_chip = itemView.findViewById(R.id.repeated_tag);
+            reminder_chip = itemView.findViewById(R.id.reminder_tag);
             cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
     }

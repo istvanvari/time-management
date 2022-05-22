@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.timeapp.R;
 import com.example.timeapp.db.TaskEntity;
 import com.example.timeapp.util.DiffUtilCallbacks;
+import com.google.android.material.chip.Chip;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
         holder.routineName.setText(routine.getName());
         holder.routineDescription.setText(routine.getDescription());
         holder.routineTime.setText(routine.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+        holder.repeated_chip.setVisibility(routine.isRepeated() ? View.VISIBLE : View.GONE);
+        holder.reminder_chip.setVisibility(routine.getReminderType() != 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -56,6 +59,12 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
             }
             if (bundle.containsKey("routineTime")) {
                 holder.routineTime.setText(bundle.getString("routineTime"));
+            }
+            if (bundle.containsKey("repeated")) {
+                holder.repeated_chip.setVisibility(bundle.getBoolean("repeated") ? View.VISIBLE : View.GONE);
+            }
+            if (bundle.containsKey("reminderType")) {
+                holder.reminder_chip.setVisibility(bundle.getBoolean("reminderType") ? View.VISIBLE : View.GONE);
             }
         }
     }
@@ -94,12 +103,15 @@ public class RoutinesRecyclerViewAdapter extends RecyclerView.Adapter<RoutinesRe
     public class RoutinesViewHolder extends RecyclerView.ViewHolder {
 
         public TextView routineName, routineDescription, routineTime;
+        public Chip reminder_chip, repeated_chip;
 
         public RoutinesViewHolder(@NonNull View itemView) {
             super(itemView);
             routineName = itemView.findViewById(R.id.task_name);
             routineDescription = itemView.findViewById(R.id.task_desc);
             routineTime = itemView.findViewById(R.id.task_time);
+            reminder_chip = itemView.findViewById(R.id.reminder_tag);
+            repeated_chip = itemView.findViewById(R.id.repeated_tag);
             itemView.setOnClickListener(v -> listener.onRoutinesClick(routines.get(getAdapterPosition()).getId()));
         }
     }

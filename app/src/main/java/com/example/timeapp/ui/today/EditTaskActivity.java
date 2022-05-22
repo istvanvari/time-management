@@ -90,6 +90,8 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskPeriod.setText(PERIODS[period], false);
                 if (period != 0) {
                     chipGroupDay.check(chipGroupDay.getChildAt(day - 1).getId());
+                }else {
+                    hideSelectDay(true);
                 }
             }
             if (task.getReminderType() != 0) {
@@ -98,6 +100,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 reminder = task.getReminderType();
                 taskReminder.setText(REMINDERS[reminder - 1], false);
             }
+            initialReminderType = task.getReminderType();
 
             saveButton.setText(R.string.save);
         } else { // new
@@ -199,6 +202,7 @@ public class EditTaskActivity extends AppCompatActivity {
         });
         taskReminder.setOnItemClickListener((parent, view, position, id) -> {
             reminder = position + 1;
+            Log.d(TAG, "setListeners: reminder " + reminder);
         });
         chipGroupDay.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId != -1) {
@@ -228,7 +232,6 @@ public class EditTaskActivity extends AppCompatActivity {
         task.setRepeated(isRepeated);
 
         if (isRepeated) {
-            Log.d(TAG, "addTask: isRepeated");
             task.setPeriod(period);
             task.setDay(day);
             task.setDate(LocalDate.now().toString());
@@ -239,7 +242,7 @@ public class EditTaskActivity extends AppCompatActivity {
         if (remindMe) {
             task.setReminderType(reminder);
             taskViewModel.setAlarm(task, getApplicationContext());
-        } else if (initialReminderType != -1 && initialReminderType != reminder) {
+        } else if (initialReminderType != 0 && initialReminderType != reminder) {
             taskViewModel.deleteAlarm(task, getApplicationContext());
             task.setReminderType(0);
         } else {

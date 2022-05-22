@@ -63,6 +63,9 @@ public class DiffUtilCallbacks extends DiffUtil.Callback {
         if (oldTask.isRepeated() != newTask.isRepeated()) {
             diff.putBoolean("repeated", newTask.isRepeated());
         }
+        if (oldTask.getReminderType() != newTask.getReminderType()) {
+            diff.putBoolean("reminderType", newTask.getReminderType() != 0);
+        }
 
         if (diff.size() == 0) {
             return null;

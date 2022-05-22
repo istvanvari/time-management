@@ -305,7 +305,7 @@
                     android:id="@+id/reminder_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:constraint_referenced_ids="reminder_layout,divider3" />
 
                 <com.google.android.material.textfield.TextInputLayout

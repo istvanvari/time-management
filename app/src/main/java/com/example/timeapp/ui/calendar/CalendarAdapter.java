@@ -44,6 +44,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         holder.taskName.setText(task.getName());
         holder.taskDescription.setText(task.getDescription());
         holder.chip.setVisibility(View.GONE);
+        holder.reminder_chip.setVisibility(View.GONE);
         holder.taskTime.setText(task.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
     }
 
@@ -98,7 +99,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         public TextView taskName;
         public TextView taskDescription;
         public TextView taskTime;
-        public Chip chip;
+        public Chip chip, reminder_chip;
         public CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -107,6 +108,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
             taskDescription = itemView.findViewById(R.id.task_desc);
             taskTime = itemView.findViewById(R.id.task_time);
             chip = itemView.findViewById(R.id.repeated_tag);
+            reminder_chip = itemView.findViewById(R.id.reminder_tag);
             cardView = itemView.findViewById(R.id.card_view);
             cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
