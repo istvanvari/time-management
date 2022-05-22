@@ -17,10 +17,10 @@
             android:theme="@style/Floating" />
         <activity
             android:name=".MainActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:configChanges="uiMode"
             android:theme="@style/Theme.TimeApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".util.TaskReminderBroadcast" />
     </application>
 
 </manifest>

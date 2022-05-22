@@ -40,11 +40,14 @@ public class TaskEntity implements Comparable<TaskEntity> {
     @ColumnInfo(name = "is_repeated")
     private boolean isRepeated;
 
+    @ColumnInfo(name = "reminder_type")
+    private int reminderType;
+
     @Ignore
     public TaskEntity() {
     }
 
-    public TaskEntity(String name, String description, String date, OffsetTime time, boolean isCompleted, int period, int day, boolean isRepeated) {
+    public TaskEntity(String name, String description, String date, OffsetTime time, boolean isCompleted, int period, int day, boolean isRepeated, int reminderType) {
         this.name = name;
         this.description = description;
         this.date = date;
@@ -53,6 +56,7 @@ public class TaskEntity implements Comparable<TaskEntity> {
         this.period = period;
         this.day = day;
         this.isRepeated = isRepeated;
+        this.reminderType = reminderType;
     }
 
     public int getPeriod() {
@@ -125,6 +129,14 @@ public class TaskEntity implements Comparable<TaskEntity> {
 
     public void setRepeated(boolean repeated) {
         isRepeated = repeated;
+    }
+
+    public int getReminderType() {
+        return reminderType;
+    }
+
+    public void setReminderType(int reminderType) {
+        this.reminderType = reminderType;
     }
 
     @Override

@@ -53,6 +53,7 @@ public class TodayFragment extends Fragment implements ClickListener {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 taskViewModel.deleteTask(adapter.getTaskAt(viewHolder.getAdapterPosition()));
+                taskViewModel.deleteAlarm(adapter.getTaskAt(viewHolder.getAdapterPosition()), getContext());
                 Snackbar.make(root, "Task deleted", Snackbar.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView);

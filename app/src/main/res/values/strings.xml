@@ -41,4 +41,12 @@
         <item>3 weeks</item>
         <item>4 weeks</item>
     </string-array>
+    <string-array name="reminders">
+        <item>On start of the task</item>
+        <item>5 minutes before</item>
+        <item>15 minutes before</item>
+        <item>30 minutes before</item>
+        <item>1 hour before</item>
+    </string-array>
+
 </resources>

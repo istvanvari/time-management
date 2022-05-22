@@ -7,6 +7,7 @@
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/calendar.xml" value="0.149" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_arrow_back_white_24dp.xml" value="0.1975" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_baseline_date_range_24.xml" value="0.1975" />
+        <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.1975" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_calendar.xml" value="0.1975" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_edit_calendar_24.xml" value="0.1975" />
         <entry key="..\:/Users/istva/AndroidStudioProjects/TimeApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1535" />
@@ -48,7 +49,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.176" />
+        <option name="scale" value="0.264" />
       </ProjectState>
     </option>
   </component>

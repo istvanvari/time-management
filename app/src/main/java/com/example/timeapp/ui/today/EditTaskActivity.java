@@ -35,21 +35,22 @@ import java.time.format.DateTimeFormatter;
 public class EditTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "EditTaskActivity";
+    private static String[] REMINDERS;
+    private static String[] PERIODS;
     TaskViewModel taskViewModel;
     TextInputEditText taskName, taskDescription, taskDate, taskTime;
     TextInputLayout taskNameLayout, taskDescriptionLayout, taskDateLayout, taskTimeLayout;
-    AutoCompleteTextView taskPeriod;
+    AutoCompleteTextView taskPeriod, taskReminder;
     Button saveButton, cancelButton;
     TextView subheader;
     Chip chipToday, chipTomorrow;
     ChipGroup chipGroupDate, chipGroupDay;
-    SwitchMaterial taskRepeatSwitch;
-    Group taskRepeatGroup, selectDayGroup;
-    boolean isRepeated = false;
-    int ACTION_TYPE, TASK_TYPE, day = -1, period = -1;
+    SwitchMaterial taskRepeatSwitch, reminderSwitch;
+    Group taskRepeatGroup, selectDayGroup, reminderGroup;
+    boolean isRepeated = false, remindMe = false;
+    int ACTION_TYPE, TASK_TYPE, day = -1, period = -1, reminder = -1, initialReminderType = -1;
     LocalDate date = null;
     OffsetTime time = null;
-    private String[] PERIODS;
     private TaskEntity task;
 
 
@@ -61,7 +62,9 @@ public class EditTaskActivity extends AppCompatActivity {
         int id = getIntent().getIntExtra("id", -1);
         ACTION_TYPE = getIntent().getIntExtra("action", -1);
         TASK_TYPE = getIntent().getIntExtra("task_type", -1);
+
         PERIODS = getResources().getStringArray(R.array.periods);
+        REMINDERS = getResources().getStringArray(R.array.reminders);
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
@@ -89,6 +92,12 @@ public class EditTaskActivity extends AppCompatActivity {
                     chipGroupDay.check(chipGroupDay.getChildAt(day - 1).getId());
                 }
             }
+            if (task.getReminderType() != 0) {
+                reminderSwitch.setChecked(true);
+                initialReminderType = task.getReminderType();
+                reminder = task.getReminderType();
+                taskReminder.setText(REMINDERS[reminder - 1], false);
+            }
 
             saveButton.setText(R.string.save);
         } else { // new
@@ -109,12 +118,17 @@ public class EditTaskActivity extends AppCompatActivity {
         taskDescription = findViewById(R.id.task_description);
         taskDate = findViewById(R.id.task_date);
         taskTime = findViewById(R.id.task_time);
+
         taskPeriod = findViewById(R.id.routine_repeat);
+        taskReminder = findViewById(R.id.reminder);
 
         taskRepeatGroup = findViewById(R.id.repeat_group);
         selectDayGroup = findViewById(R.id.selectDayGroup);
         selectDayGroup.setReferencedIds(new int[]{R.id.subheader, R.id.routines_horizontal_scroll_view});
+        reminderGroup = findViewById(R.id.reminder_group);
+
         taskRepeatSwitch = findViewById(R.id.repeated_switch);
+        reminderSwitch = findViewById(R.id.reminder_switch);
 
         subheader = findViewById(R.id.subheader);
 
@@ -134,6 +148,7 @@ public class EditTaskActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(v -> onBackPressed());
 
         setPeriodAdapter();
+        setReminderAdapter();
 
         taskRepeatSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -151,6 +166,15 @@ public class EditTaskActivity extends AppCompatActivity {
                 chipTomorrow.setEnabled(true);
                 isRepeated = false;
                 checkChips();
+            }
+        });
+        reminderSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                reminderGroup.setVisibility(Group.VISIBLE);
+                remindMe = true;
+            } else {
+                reminderGroup.setVisibility(Group.GONE);
+                remindMe = false;
             }
         });
         chipToday.setOnClickListener(v -> {
@@ -172,7 +196,9 @@ public class EditTaskActivity extends AppCompatActivity {
             } else {
                 hideSelectDay(false);
             }
-            Log.d(TAG, "setListeners: period " + period + " day " + day);
+        });
+        taskReminder.setOnItemClickListener((parent, view, position, id) -> {
+            reminder = position + 1;
         });
         chipGroupDay.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId != -1) {
@@ -200,6 +226,7 @@ public class EditTaskActivity extends AppCompatActivity {
         task.setTime(time != null ? time : task.getTime());
         task.setCompleted(false);
         task.setRepeated(isRepeated);
+
         if (isRepeated) {
             Log.d(TAG, "addTask: isRepeated");
             task.setPeriod(period);
@@ -209,13 +236,22 @@ public class EditTaskActivity extends AppCompatActivity {
             task.setPeriod(0);
             task.setDay(0);
         }
-
+        if (remindMe) {
+            task.setReminderType(reminder);
+            taskViewModel.setAlarm(task, getApplicationContext());
+        } else if (initialReminderType != -1 && initialReminderType != reminder) {
+            taskViewModel.deleteAlarm(task, getApplicationContext());
+            task.setReminderType(0);
+        } else {
+            task.setReminderType(0);
+        }
 
         if (ACTION_TYPE == 0) {
             taskViewModel.addTask(task);
         } else {
             taskViewModel.updateTask(task);
         }
+
         finish();
     }
 
@@ -241,12 +277,21 @@ public class EditTaskActivity extends AppCompatActivity {
                 isvalid = false;
             }
         }
+        if (remindMe && reminder == -1) {
+            Snackbar.make(saveButton, "Please select a time for your reminder", Snackbar.LENGTH_SHORT).show();
+            isvalid = false;
+        }
         return isvalid;
     }
 
     private void setPeriodAdapter() {
         taskPeriod.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
                 PERIODS));
+    }
+
+    private void setReminderAdapter() {
+        taskReminder.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+                REMINDERS));
     }
 
     private void hideSelectDay(boolean b) {

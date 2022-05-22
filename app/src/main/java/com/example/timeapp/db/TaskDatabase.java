@@ -11,7 +11,7 @@ import androidx.room.TypeConverters;
 import com.example.timeapp.db.Converters.DateConverter;
 import com.example.timeapp.db.Converters.TimeConverter;
 
-@Database(entities = {TaskEntity.class, RoutineEntity.class}, version = 8)
+@Database(entities = {TaskEntity.class, RoutineEntity.class}, version = 10)
 @TypeConverters({DateConverter.class, TimeConverter.class})
 public abstract class TaskDatabase extends RoomDatabase {
 
@@ -29,6 +29,5 @@ public abstract class TaskDatabase extends RoomDatabase {
 
     public abstract TaskDao taskDao();
 
-    public abstract RoutineDao routineDao();
 }
 
