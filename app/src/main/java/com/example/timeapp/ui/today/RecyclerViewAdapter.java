@@ -53,10 +53,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.taskTime.setText(task.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         holder.repeated_chip.setVisibility(task.isRepeated() ? View.VISIBLE : View.GONE);
         holder.reminder_chip.setVisibility(task.getReminderType() != 0 ? View.VISIBLE : View.GONE);
+        holder.cardView.setAlpha(task.isCompleted() ? 0.56f : 1f);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position,
+                                 @NonNull List<Object> payloads) {
         if (payloads.isEmpty())
             onBindViewHolder(holder, position);
         else {
@@ -75,6 +77,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
             if (bundle.containsKey("reminderType")) {
                 holder.reminder_chip.setVisibility(bundle.getBoolean("reminderType") ? View.VISIBLE : View.GONE);
+            }
+            if (bundle.containsKey("completed")) {
+                holder.cardView.setAlpha(bundle.getBoolean("completed") ? 0.56f : 1f);
             }
         }
     }
@@ -129,6 +134,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return tasks.get(position);
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView taskName;
@@ -142,10 +148,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             taskName = itemView.findViewById(R.id.task_name);
             taskDescription = itemView.findViewById(R.id.task_desc);
             taskTime = itemView.findViewById(R.id.task_time);
-            cardView = itemView.findViewById(R.id.card_view);
             repeated_chip = itemView.findViewById(R.id.repeated_tag);
             reminder_chip = itemView.findViewById(R.id.reminder_tag);
-            cardView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
+            cardView = itemView.findViewById(R.id.card_view);
+            itemView.setOnClickListener(v -> listener.openEditTaskActivity(tasks.get(getAdapterPosition()).getId()));
         }
     }
+
 }

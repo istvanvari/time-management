@@ -11,5 +11,7 @@
     <color name="lightGray">#414c50</color>
     <color name="darkCyan">#0784b5</color>
     <color name="lightCyan">#39ace7</color>
+    <color name="green">#009900</color>
+    <color name="selectedDark">#ff0000</color>
 
 </resources>

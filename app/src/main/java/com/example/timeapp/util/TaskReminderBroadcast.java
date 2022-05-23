@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.timeapp.MainActivity;
 import com.example.timeapp.R;
 
+import java.time.LocalDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 
@@ -24,7 +25,12 @@ public class TaskReminderBroadcast extends BroadcastReceiver {
         Bundle bundle = intent.getExtras();
         String text = bundle.getString("name");
         String time = bundle.getString("time");
-        OffsetTime offsetTime = OffsetTime.parse(time);
+        OffsetTime offsetTime;
+        try {
+            offsetTime = OffsetTime.parse(time);
+        } catch (Exception e) {
+            offsetTime = LocalDateTime.now().toLocalTime().atOffset(OffsetTime.now().getOffset());
+        }
         int remindType = bundle.getInt("remindType");
 
         String title;

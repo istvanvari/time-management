@@ -67,6 +67,10 @@ public class DiffUtilCallbacks extends DiffUtil.Callback {
             diff.putBoolean("reminderType", newTask.getReminderType() != 0);
         }
 
+        if (oldTask.isCompleted() != newTask.isCompleted()) {
+            diff.putBoolean("completed", newTask.isCompleted());
+        }
+
         if (diff.size() == 0) {
             return null;
         }

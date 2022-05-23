@@ -25,6 +25,7 @@ import java.util.List;
 public class TaskViewModel extends ViewModel {
     private final TaskRepository repository;
     String TAG = "HomeViewModel";
+    private TaskEntity cache = null;
     private AlarmManager alarmManager;
     private MutableLiveData<LocalDate> day = new MutableLiveData<>();
     private LiveData<List<TaskEntity>> tasks;
@@ -58,7 +59,12 @@ public class TaskViewModel extends ViewModel {
     }
 
     public void deleteTask(TaskEntity task) {
+        cache = task;
         repository.deleteTask(task);
+    }
+
+    public TaskEntity getCache() {
+        return cache;
     }
 
     public LiveData<List<TaskEntity>> getTasksSorted() {
@@ -125,5 +131,6 @@ public class TaskViewModel extends ViewModel {
         }
         alarmManager.cancel(pendingIntent);
     }
+
 
 }
