@@ -28,6 +28,7 @@ public class TaskViewModel extends ViewModel {
     private TaskEntity cache = null;
     private AlarmManager alarmManager;
     private MutableLiveData<LocalDate> day = new MutableLiveData<>();
+    private LiveData<List<TaskEntity>> repeatedTasks;
     private LiveData<List<TaskEntity>> tasks;
     private MutableLiveData<TaskEntity> task;
 
@@ -35,6 +36,7 @@ public class TaskViewModel extends ViewModel {
         repository = TaskRepository.getInstance();
         task = new MutableLiveData<>();
         tasks = repository.getTasksByDate(LocalDate.now().toString());
+        repeatedTasks = repository.getRepeatedTasks();
     }
 
     public LiveData<List<TaskEntity>> getTasks() {
@@ -133,4 +135,7 @@ public class TaskViewModel extends ViewModel {
     }
 
 
+    public LiveData<List<TaskEntity>> getRepeatedTasks() {
+        return repeatedTasks;
+    }
 }

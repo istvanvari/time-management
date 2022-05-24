@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.timeapp.databinding.FragmentRoutinesBinding;
 import com.example.timeapp.db.TaskEntity;
 import com.example.timeapp.ui.today.EditTaskActivity;
+import com.example.timeapp.ui.today.TaskViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,13 +34,13 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
     private List<TaskEntity> tasks = new ArrayList<>();
     private RoutinesRecyclerViewAdapter adapter;
     private FragmentRoutinesBinding binding;
-    private RoutinesViewModel routinesViewModel;
+    private TaskViewModel routinesViewModel;
     private ChipGroup chipGroup;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         routinesViewModel =
-                new ViewModelProvider(this).get(RoutinesViewModel.class);
+                new ViewModelProvider(this).get(TaskViewModel.class);
 
         binding = FragmentRoutinesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -71,7 +72,13 @@ public class RoutinesFragment extends Fragment implements RoutinesRecyclerViewAd
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 routinesViewModel.deleteTask(adapter.getRoutineAt(viewHolder.getAdapterPosition()));
-                Snackbar.make(root, "Routine deleted", Snackbar.LENGTH_LONG).show();
+                routinesViewModel.deleteAlarm(adapter.getRoutineAt(viewHolder.getAdapterPosition()), getContext());
+                Snackbar.make(root, "Routine task deleted", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", view -> {
+                            routinesViewModel.addTask(routinesViewModel.getCache());
+                            routinesViewModel.setAlarm(routinesViewModel.getCache(), getContext());
+                        })
+                        .show();
             }
         }).attachToRecyclerView(recyclerView);
 
