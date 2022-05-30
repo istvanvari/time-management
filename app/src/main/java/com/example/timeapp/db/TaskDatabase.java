@@ -8,11 +8,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.timeapp.db.Converters.DateConverter;
 import com.example.timeapp.db.Converters.TimeConverter;
 
-@Database(entities = {TaskEntity.class, RoutineEntity.class}, version = 10)
-@TypeConverters({DateConverter.class, TimeConverter.class})
+@Database(entities = {TaskEntity.class}, version = 11)
+@TypeConverters({TimeConverter.class})
 public abstract class TaskDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "tasks.db";

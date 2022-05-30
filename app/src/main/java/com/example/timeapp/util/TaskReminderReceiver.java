@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 
-public class TaskReminderBroadcast extends BroadcastReceiver {
+public class TaskReminderReceiver extends BroadcastReceiver {
     private String CHANNEL_ID = "TaskReminder";
 
     @Override

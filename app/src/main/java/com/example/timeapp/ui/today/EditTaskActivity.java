@@ -1,6 +1,8 @@
 package com.example.timeapp.ui.today;
 
 import static android.text.format.DateFormat.is24HourFormat;
+import static com.example.timeapp.util.Constants.ACTION_TYPE_EDIT;
+import static com.example.timeapp.util.Constants.TASK_TYPE_REPEATED;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -71,7 +73,7 @@ public class EditTaskActivity extends AppCompatActivity {
         initViews();
         setListeners();
 
-        if (ACTION_TYPE == 1) { // edit
+        if (ACTION_TYPE == ACTION_TYPE_EDIT) { // edit
             Log.d(TAG, "create action type " + ACTION_TYPE);
             task = taskViewModel.getTask(id).getValue();
             taskName.setText(task.getName());
@@ -90,7 +92,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskPeriod.setText(PERIODS[period], false);
                 if (period != 0) {
                     chipGroupDay.check(chipGroupDay.getChildAt(day - 1).getId());
-                }else {
+                } else {
                     hideSelectDay(true);
                 }
             }
@@ -105,7 +107,7 @@ public class EditTaskActivity extends AppCompatActivity {
             saveButton.setText(R.string.save);
         } else { // new
             task = new TaskEntity();
-            if (TASK_TYPE == 1) {
+            if (TASK_TYPE == TASK_TYPE_REPEATED) {
                 taskRepeatSwitch.setChecked(true);
             }
         }

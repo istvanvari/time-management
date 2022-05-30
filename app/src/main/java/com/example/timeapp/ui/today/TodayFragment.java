@@ -1,5 +1,8 @@
 package com.example.timeapp.ui.today;
 
+import static com.example.timeapp.util.Constants.ACTION_TYPE_EDIT;
+import static com.example.timeapp.util.Constants.ACTION_TYPE_NEW;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +51,7 @@ public class TodayFragment extends Fragment implements ClickListener {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
+
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 TaskEntity task = adapter.getTaskAt(viewHolder.getAdapterPosition());
@@ -83,13 +87,13 @@ public class TodayFragment extends Fragment implements ClickListener {
 
     public void openEditTaskActivity(int id) {
         Intent intent = new Intent(getContext(), EditTaskActivity.class);
-        intent.putExtra("id", id).putExtra("action", 1);
+        intent.putExtra("id", id).putExtra("action", ACTION_TYPE_EDIT);
         startActivity(intent);
     }
 
     public void openAddTaskActivity() {
         Intent intent = new Intent(getContext(), EditTaskActivity.class);
-        intent.putExtra("action", 0);
+        intent.putExtra("action", ACTION_TYPE_NEW);
         startActivity(intent);
     }
 

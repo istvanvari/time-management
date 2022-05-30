@@ -12,7 +12,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.timeapp.db.TaskEntity;
-import com.example.timeapp.util.TaskReminderBroadcast;
+import com.example.timeapp.db.TaskRepository;
+import com.example.timeapp.util.TaskReminderReceiver;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,10 +45,6 @@ public class TaskViewModel extends ViewModel {
         return tasks;
     }
 
-    public LiveData<List<TaskEntity>> getTasksByDate(String date) {
-        return repository.getTasksByDate(date);
-    }
-
     public LiveData<TaskEntity> getTask(int id) {
         return repository.getTask(id);
     }
@@ -70,7 +67,7 @@ public class TaskViewModel extends ViewModel {
     }
 
     public LiveData<List<TaskEntity>> getTasksSorted() {
-        return repository.getTasksSorted();
+        return repository.getTasks();
     }
 
     public LiveData<LocalDate> getDay() {
@@ -85,7 +82,7 @@ public class TaskViewModel extends ViewModel {
         LocalDate date = LocalDate.parse(task.getDate());
         OffsetTime time = task.getTime();
 
-        Intent intent = new Intent(context, TaskReminderBroadcast.class);
+        Intent intent = new Intent(context, TaskReminderReceiver.class);
         intent.putExtra("name", task.getName());
         intent.putExtra("time", task.getTime().toString());
         intent.putExtra("remindType", task.getReminderType());
@@ -126,7 +123,7 @@ public class TaskViewModel extends ViewModel {
     }
 
     public void deleteAlarm(TaskEntity task, Context context) {
-        Intent intent = new Intent(context, TaskReminderBroadcast.class);
+        Intent intent = new Intent(context, TaskReminderReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getId(), intent, 0);
         if (alarmManager == null) {
             alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);

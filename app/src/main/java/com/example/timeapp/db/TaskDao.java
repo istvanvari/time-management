@@ -27,7 +27,7 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table WHERE id = :id")
     TaskEntity getTaskById(int id);
 
-    @Query("SELECT * FROM task_table")
+    @Query("SELECT * FROM task_table ORDER BY task_time ASC")
     LiveData<List<TaskEntity>> getAllTasks();
 
     @Query("SELECT * FROM task_table WHERE is_repeated = 1 ORDER BY task_time ASC")
@@ -35,10 +35,4 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task_table WHERE task_date = :date AND is_repeated = 0 ORDER BY task_time ASC")
     LiveData<List<TaskEntity>> getTasksByDate(String date);
-
-    @Query("SELECT COUNT(id) FROM task_table")
-    int getNumberOfRows();
-
-    @Query("SELECT * FROM task_table ORDER BY task_time ASC")
-    LiveData<List<TaskEntity>> getTasksSorted();
 }
